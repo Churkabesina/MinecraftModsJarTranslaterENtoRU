@@ -1,9 +1,0 @@
-.idea
-venv
-__pycache__
-log.txt
-config.py
-IAMtoken.json
-test.py
-converter_log.txt
-.tmx

@@ -12,7 +12,8 @@ def IsExceptions(eng, rus):
 
 
 # //argv = [path_jars, path_tmx]//
-if len(argv) == 1:
+if len(argv) < 3:
+    raise Exception('Не указан аргумент/аргументы')  # delete this string of code when development
     path_jars = r'D:\JarsDatabase'
     path_tmx = r'D:\JarsDatabase\stringsdatabase.tmx'
 else:
