@@ -21,8 +21,7 @@ def translate(dict_to_translate: dict[str, str], token: str, folder_id: str) -> 
             body['texts'] = string
             response = requests.post('https://translate.api.cloud.yandex.net/translate/v2/translate',
                                      headers=headers,
-                                     json=body
-                                     )
+                                     json=body)
             dict_to_translate[dict_key] = json.loads(response.text)['translations'][0]['text']
 
     except Exception or EOFError as error:

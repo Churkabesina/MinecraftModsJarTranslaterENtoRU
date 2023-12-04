@@ -3,6 +3,14 @@ import json
 from os import listdir
 from os.path import isfile, join
 from sys import argv
+
+
+def IsExceptions(eng, rus):
+    for i in str_exceptions:
+        if i in eng or i in rus:
+            return True
+
+
 # //argv = [path_jars, path_tmx]//
 if len(argv) == 1:
     path_jars = r'D:\JarsDatabase'
@@ -11,6 +19,7 @@ else:
     path_jars = argv[1]
     path_tmx = argv[2]
 
+str_exceptions = {'&', '<', '>'}
 list_jars = [x for x in listdir(path_jars) if isfile(join(path_jars, x)) and x.endswith('.jar')]
 count_strings = 0
 print(f'Считано {len(list_jars)} названий модов')
@@ -19,7 +28,7 @@ with open(path_tmx, 'w', encoding='UTF-8') as f_out:
     f_out.write(f'<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n'
                 f'<tmx version="1.4">\n'
                 f'    <header creationtool="ZubochistkaConverter" creationtoolversion="1.0" datatype="PlainText" '
-                f'segtype="block" srclang="en"/>\n'
+                f'segtype="block" srclang="en" o-tmf="json" adminlang="ru"/>\n'
                 f'    <body>\n')
 
 with open('converter_log.txt', 'w', encoding='UTF-8'):
@@ -51,6 +60,8 @@ for mod_name in list_jars:
             continue
     with open(path_tmx, 'a', encoding='UTF-8') as f_out:
         for strings in zip(eng_strings, ru_strings, strict=True):
+            if IsExceptions(strings[0][1], strings[1][1]):
+                continue
             f_out.write(f'        <tu srclang="en">\n'
                         f'            <tuv xml:lang="en">\n'
                         f'                <seg>{strings[0][1]}</seg>\n'
@@ -59,8 +70,8 @@ for mod_name in list_jars:
                         f'                <seg>{strings[1][1]}</seg>\n'
                         f'            </tuv>\n'
                         f'        </tu>\n')
+            count_strings += 1
         print(f'{mod_name} || количество строк: {len(eng_strings)}')
-        count_strings += len(eng_strings)
     with open('converter_log.txt', 'a', encoding='UTF-8') as f:
         f.write(f'{mod_name} - Успешно добавлен в базу\n')
 with open(path_tmx, 'a', encoding='UTF-8') as f_out:
